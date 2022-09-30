@@ -11,6 +11,7 @@ const refs = {
 };
 
 let chosenTime = null;
+let timerId = null;
 refs.btn.addEventListener('click', onBtnClick);
 refs.btn.setAttribute('disabled', true);
 
@@ -26,7 +27,7 @@ const options = {
 
     if (deltaTime < 0) {
       Notiflix.Notify.failure('Please choose a date in the future');
-      return
+      return;
     }
 
     refs.btn.removeAttribute('disabled');
@@ -36,23 +37,19 @@ const options = {
 flatpickr('#datetime-picker', options);
 
 function onBtnClick(e) {
-  setInterval(() => {
+  timerId = setInterval(() => {
     const deltaCurrentTime = chosenTime - Date.now();
     const time = convertMs(deltaCurrentTime);
 
-    console.log(chosenTime);
-    console.log(Math.round(Date.now() / 1000));
-    console.log(chosenTime === Math.round(Date.now() / 1000));
+    if (deltaCurrentTime < 1000) {
+      clearInterval(timerId);
+    }
 
-    if (deltaCurrentTime === 0) {
-      return;
-    };
     updateClockface(time);
   }, 1000);
 
   e.target.setAttribute('disabled', true);
 }
-
 
 function updateClockface({ days, hours, minutes, seconds }) {
   refs.days.textContent = `${days}`;
@@ -60,7 +57,6 @@ function updateClockface({ days, hours, minutes, seconds }) {
   refs.minutes.textContent = `${minutes}`;
   refs.seconds.textContent = `${seconds}`;
 }
-
 
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
@@ -86,5 +82,3 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-
