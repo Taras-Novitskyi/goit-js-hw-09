@@ -10,10 +10,11 @@ const refs = {
   seconds: document.querySelector('[data-seconds]'),
 };
 
-let chosenTime = null;
-let timerId = null;
 refs.btn.addEventListener('click', onBtnClick);
 refs.btn.setAttribute('disabled', true);
+
+let chosenTime = null;
+let timerId = null;
 
 const options = {
   enableTime: true,
@@ -39,11 +40,12 @@ flatpickr('#datetime-picker', options);
 function onBtnClick(e) {
   timerId = setInterval(() => {
     const deltaCurrentTime = chosenTime - Date.now();
-    const time = convertMs(deltaCurrentTime);
-
+    
     if (deltaCurrentTime < 1000) {
       clearInterval(timerId);
     }
+
+    const time = convertMs(deltaCurrentTime);
 
     updateClockface(time);
   }, 1000);
@@ -52,10 +54,10 @@ function onBtnClick(e) {
 }
 
 function updateClockface({ days, hours, minutes, seconds }) {
-  refs.days.textContent = `${days}`;
-  refs.hours.textContent = `${hours}`;
-  refs.minutes.textContent = `${minutes}`;
-  refs.seconds.textContent = `${seconds}`;
+  refs.days.textContent = days;
+  refs.hours.textContent = hours;
+  refs.minutes.textContent = minutes;
+  refs.seconds.textContent = seconds;
 }
 
 function addLeadingZero(value) {
