@@ -17,6 +17,13 @@ function onFormSubmit(e) {
   const stepDelay = Number(formData.step);
   const amount = Number(formData.amount);
 
+  if (firstDelay < 0 || stepDelay < 0 || amount < 0) {
+    Notiflix.Notify.failure('Please, enter correct data');
+    e.currentTarget.reset();
+    formData = {};
+    return;
+  }
+
   for (
     let delay = firstDelay, position = 1;
     position <= amount;
